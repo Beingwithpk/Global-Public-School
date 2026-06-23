@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Global Public School</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #9A7A2E;
+    --deep: #0A0A0F;
+    --surface: #111118;
+    --surface2: #1A1A24;
+    --surface3: #22222E;
+    --text: #F0EBE0;
+    --text-muted: #9A917E;
+    --border: rgba(201,168,76,0.2);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--deep); color: var(--text); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+  /* Hero */
+  .hero-wrap { position: relative; height: 100vh; overflow: hidden; }
+  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform; transition: transform 0.05s linear; }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,15,0.5) 0%, rgba(10,10,15,0.3) 40%, rgba(10,10,15,0.85) 100%); }
+  .hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 2; padding: 0 1.5rem; }
+
+  /* Gold line */
+  .gold-line { display: inline-flex; align-items: center; gap: 12px; }
+  .gold-line::before, .gold-line::after { content: ''; flex: 1; height: 1px; background: var(--gold); width: 60px; }
+
+  /* Nav */
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 2.5rem; height: 76px; display: flex; align-items: center; justify-content: space-between; transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s, height 0.3s; }
+  .nav.scrolled { background: rgba(8,8,12,0.96); backdrop-filter: blur(20px) saturate(1.4); border-bottom: 1px solid rgba(201,168,76,0.15); box-shadow: 0 1px 40px rgba(0,0,0,0.6); height: 68px; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--gold); letter-spacing: 2px; display: flex; align-items: center; gap: 14px; text-transform: uppercase; }
+  .nav-logo-name { display: flex; flex-direction: column; gap: 1px; }
+  .nav-logo-name span:first-child { font-size: 1rem; font-weight: 700; color: var(--gold); letter-spacing: 2px; line-height: 1; }
+  .nav-logo-name span:last-child { font-size: 0.5rem; font-weight: 400; color: var(--text-muted); letter-spacing: 4px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
+  .nav-crest { width: 40px; height: 40px; border: 1px solid var(--gold); position: relative; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--gold); flex-shrink: 0; }
+  .nav-crest::before { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(201,168,76,0.3); }
+  .nav-center { display: flex; align-items: center; gap: 0.25rem; }
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links li { position: relative; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.68rem; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; padding: 0.5rem 1rem; display: block; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 1rem; right: 1rem; height: 1px; background: var(--gold); transform: scaleX(0); transition: transform 0.25s; }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-btn { background: transparent; border: 1px solid rgba(201,168,76,0.6); color: var(--gold); padding: 0.55rem 1.5rem; font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+  .nav-btn::before { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateX(-100%); transition: transform 0.3s; z-index: -1; }
+  .nav-btn:hover { color: var(--deep); border-color: var(--gold); }
+  .nav-btn:hover::before { transform: translateX(0); }
+  .nav-divider { width: 1px; height: 18px; background: rgba(201,168,76,0.2); margin: 0 1.5rem; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 1px; background: var(--gold); display: block; transition: all 0.3s; }
+
+  /* Sections */
+  .section { padding: 7rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .section-full { padding: 7rem 0; background: var(--surface); }
+  .section-full .section { padding: 0 2rem; }
+
+  /* Tag */
+  .tag { display: inline-flex; align-items: center; gap: 8px; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .tag::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+
+  /* Headings */
+  .display-heading { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 700; line-height: 1.15; }
+  .display-heading em { font-style: italic; color: var(--gold); }
+  .sub-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; line-height: 1.3; }
+  .body-text { color: var(--text-muted); line-height: 1.85; font-size: 0.9rem; font-weight: 300; }
+
+  /* Cards */
+  .card { background: var(--surface2); border: 1px solid var(--border); padding: 2.5rem; transition: border-color 0.3s, transform 0.3s; }
+  .card:hover { border-color: var(--gold); transform: translateY(-4px); }
+  .card-icon { width: 52px; height: 52px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.4rem; }
+
+  /* Grid helpers */
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 2rem; align-items: center; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+
+  /* Stats */
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: var(--gold); line-height: 1; }
+
+  /* Principal */
+  .principal-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-style: italic; line-height: 1.7; color: var(--text); border-left: 3px solid var(--gold); padding-left: 2rem; }
+  .principal-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: grayscale(20%); }
+  .principal-frame { position: relative; }
+  .principal-frame::after { content: ''; position: absolute; bottom: -16px; right: -16px; width: 100%; height: 100%; border: 1px solid var(--gold-dark); z-index: -1; }
+
+  /* Achievement */
+  .achievement-card { background: var(--surface2); border: 1px solid var(--border); padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; transition: border-color 0.3s; }
+  .achievement-card:hover { border-color: var(--gold); }
+  .ach-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: var(--gold); line-height: 1; min-width: 60px; }
+
+  /* Gallery */
+  .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(2, 220px); gap: 6px; }
+  .gallery-item { overflow: hidden; position: relative; background: var(--surface2); cursor: pointer; }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s, filter 0.5s; filter: brightness(0.7) saturate(0.8); }
+  .gallery-item:hover .gallery-img { transform: scale(1.06); filter: brightness(0.9) saturate(1); }
+  .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.8), transparent); display: flex; align-items: flex-end; padding: 1rem; opacity: 0; transition: opacity 0.3s; }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+  /* Admissions */
+  .step { display: flex; gap: 1.5rem; align-items: flex-start; padding: 1.5rem; background: var(--surface2); border: 1px solid var(--border); transition: border-color 0.3s; }
+  .step:hover { border-color: var(--gold); }
+  .step-num { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 900; color: var(--gold); opacity: 0.4; line-height: 1; min-width: 50px; }
+
+  /* Contact */
+  .contact-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 0.9rem 1.2rem; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.3s; }
+  .contact-input:focus { border-color: var(--gold); }
+  .contact-input::placeholder { color: var(--text-muted); }
+  .submit-btn { background: var(--gold); color: var(--deep); border: none; padding: 1rem 2.5rem; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+  .submit-btn:hover { background: var(--gold-light); }
+
+  /* Footer */
+  .footer { background: var(--deep); border-top: 1px solid var(--border); padding: 4rem 2rem 2rem; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { max-width: 1200px; margin: 3rem auto 0; border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+
+  /* Divider */
+  .gold-divider { height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 0; }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Scroll progress */
+  .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(to right, var(--gold-dark), var(--gold-light)); z-index: 200; transition: width 0.1s linear; }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gallery-item.tall { grid-row: span 1; }
+    .hamburger { display: flex; }
+    .nav-links, .nav-btn, .nav-divider { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: rgba(8,8,12,0.98); padding: 2rem; gap: 0.5rem; border-bottom: 1px solid var(--border); backdrop-filter: blur(20px); }
+    .nav-links.open + .nav-btn { display: block; margin: 0 2rem 2rem; }
+  }
+  @media (max-width: 560px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+
+  /* News cards */
+  .news-card { background: var(--surface2); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.3s, transform 0.3s; }
+  .news-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+  .news-img { width: 100%; height: 160px; object-fit: cover; filter: grayscale(30%); transition: filter 0.3s; }
+  .news-card:hover .news-img { filter: grayscale(0%); }
+  .news-body { padding: 1.4rem; }
+  .news-tag { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+
+  /* Marquee */
+  .marquee-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; background: var(--surface2); }
+  .marquee { display: flex; gap: 3rem; width: max-content; animation: marquee 20s linear infinite; }
+  .marquee-item { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 1rem; white-space: nowrap; }
+  .marquee-item::after { content: '◆'; color: var(--gold); font-size: 0.5rem; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* Hero scroll cue */
+  .scroll-cue { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; animation: bounce 2s infinite; z-index: 3; }
+  .scroll-cue span { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); }
+  .scroll-cue svg { color: var(--gold); }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+  /* WhatsApp CTA Section */
+  .wa-cta-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 2rem; position: relative; overflow: hidden; }
+  .wa-cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 100%, rgba(37,211,102,0.05) 0%, transparent 65%); pointer-events: none; }
+  .wa-cta-inner { max-width: 800px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+  .wa-cta-btn { display: inline-flex; align-items: center; gap: 0.85rem; background: transparent; border: 1px solid #25D366; color: #25D366; padding: 1rem 2.5rem; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.35s; position: relative; overflow: hidden; }
+  .wa-cta-btn::before { content: ''; position: absolute; inset: 0; background: #25D366; transform: scaleX(0); transform-origin: left; transition: transform 0.35s; z-index: -1; }
+  .wa-cta-btn:hover { color: var(--deep); }
+  .wa-cta-btn:hover::before { transform: scaleX(1); }
+  .wa-cta-ornament { display: flex; align-items: center; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem; }
+  .wa-cta-ornament::before, .wa-cta-ornament::after { content: ''; flex: 1; max-width: 80px; height: 1px; background: linear-gradient(to right, transparent, rgba(37,211,102,0.4)); }
+  .wa-cta-ornament::after { background: linear-gradient(to left, transparent, rgba(37,211,102,0.4)); }
+
+  /* Tab active */
+  .tab-active { border-color: var(--gold) !important; color: var(--gold) !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ── DATA ── */
+const navLinks = ["Home","About Us","Admissions","Gallery","Achievements","Principal","News","Contact"];
+
+const stats = [
+  { num: "2014", label: "Est. Year" },
+  { num: "5,200+", label: "Students Enrolled" },
+  { num: "20+", label: "Faculty Members" },
+  { num: "98%", label: "Pass Rate" },
+];
+
+const pillars = [
+  { icon: "🎓", title: "Academic Excellence", desc: "Rigorous curriculum designed to cultivate critical thinking, creativity, and lifelong learning across all disciplines." },
+  { icon: "⚽", title: "Sports & Athletics", desc: "State-of-the-art facilities supporting over 20 sports disciplines, nurturing champions on and off the field." },
+  { icon: "🎨", title: "Arts & Culture", desc: "A vibrant arts program encompassing music, fine arts, theatre, and cultural studies to develop well-rounded individuals." },
+  { icon: "🌐", title: "Global Citizenship", desc: "International exchange programs and Model UN preparing students to lead confidently on the world stage." },
+  { icon: "🔬", title: "STEM Innovation", desc: "Cutting-edge laboratories and technology centers driving the next generation of scientists and engineers." },
+  { icon: "🤝", title: "Community Service", desc: "Embedded community outreach initiatives that build character, empathy, and social responsibility." },
+];
+
+const achievements = [
+  { num: "01", title: "National Science Olympiad", year: "2024", desc: "Gold medal at the National Science Olympiad, outperforming 400+ schools." },
+  { num: "02", title: "CBSE Topper Award", year: "2024", desc: "Three students ranked in top 10 nationally in CBSE Class XII examinations." },
+  { num: "03", title: "Inter-State Chess Championship", year: "2023", desc: "Our team secured first position at the Inter-State Chess Championship." },
+  { num: "04", title: "Green School Initiative", year: "2023", desc: "Recognised as a Platinum Green School by the Ministry of Environment." },
+  { num: "05", title: "Cultural Festival Award", year: "2023", desc: "Best Cultural Program at the National Youth Festival, New Delhi." },
+  { num: "06", title: "Digital Innovation Award", year: "2024", desc: "Top honors for our AI-powered Smart Classroom project at TechFest IIT." },
+];
+
+const admissionSteps = [
+  { step: "01", title: "Online Registration", desc: "Complete the online registration form with student and parent details on our admissions portal." },
+  { step: "02", title: "Document Submission", desc: "Submit academic records, birth certificate, and previous school documents for verification." },
+  { step: "03", title: "Entrance Assessment", desc: "Appear for our comprehensive entrance assessment designed to evaluate aptitude and potential." },
+  { step: "04", title: "Personal Interview", desc: "Shortlisted candidates attend a personal interaction with the admissions committee." },
+  { step: "05", title: "Offer Letter", desc: "Successful candidates receive an official offer letter with enrollment details within 7 working days." },
+];
+
+const galleryItems = [
+  { color: "#1A1A2E", label: "Science Lab", tall: true },
+  { color: "#16213E", label: "Library" },
+  { color: "#0F3460", label: "Sports Ground" },
+  { color: "#1B1B2F", label: "Auditorium" },
+  { color: "#162447", label: "Art Studio" },
+];
+
+const news = [
+  { tag: "Academic", title: "Annual Science Fair 2024 — Students Showcase Groundbreaking Projects", date: "June 2, 2024", color: "#1A2744" },
+  { tag: "Events", title: "Inter-School Debate Championship: GPS Wins Gold", date: "May 20, 2024", color: "#1A2D1A" },
+  { tag: "Admissions", title: "Admissions Open for 2025-26: Early Bird Deadline July 31", date: "May 10, 2024", color: "#2D1A1A" },
+];
+
+/* ── HOOKS ── */
+function useScroll() {
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const fn = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  return scrollY;
+}
+
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+/* ── COMPONENTS ── */
+
+function ScrollProgress({ scrollY }) {
+  const [max, setMax] = useState(1);
+  useEffect(() => { setMax(document.body.scrollHeight - window.innerHeight); }, []);
+  const pct = Math.min(100, (scrollY / max) * 100);
+  return <div className="scroll-progress" style={{ width: pct + '%' }} />;
+}
+
+function Nav({ scrollY, onContactClick, onPageClick }) {
+  const [open, setOpen] = useState(false);
+  const scrolled = scrollY > 60;
+  const pageLinks = ['Gallery', 'News', 'Contact'];
+  return (
+    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <div className="nav-logo">
+        <div className="nav-crest">⚜</div>
+        <div className="nav-logo-name">
+          <span>Global Public School</span>
+          <span>Est. 2014 · Benipur, Bihar</span>
+        </div>
+      </div>
+      <ul className={`nav-links ${open ? 'open' : ''}`}>
+        {navLinks.map(l => (
+          <li key={l}>
+            {pageLinks.includes(l) ? (
+              <a href="#" onClick={e => {
+                e.preventDefault(); setOpen(false);
+                if (l === 'Contact') onContactClick();
+                else onPageClick(l.toLowerCase());
+              }}>{l}</a>
+            ) : (
+              <a href={`#${l.toLowerCase().replace(/ /g,'-')}`} onClick={() => setOpen(false)}>{l}</a>
+            )}
+          </li>
+        ))}
+      </ul>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div className="nav-divider" />
+        <button className="nav-btn" style={{ display: open ? 'block' : '' }}>Apply Now</button>
+      </div>
+      <div className="hamburger" onClick={() => setOpen(!open)}>
+        <span style={{ transform: open ? 'rotate(45deg) translateY(6px)' : '' }}/>
+        <span style={{ opacity: open ? 0 : 1 }}/>
+        <span style={{ transform: open ? 'rotate(-45deg) translateY(-6px)' : '' }}/>
+      </div>
+    </nav>
+  );
+}
+
+function Hero({ scrollY }) {
+  const parallax = scrollY * 0.45;
+  const opacity = Math.max(0, 1 - scrollY / 500);
+  return (
+    <section id="home" className="hero-wrap">
+      <video
+        className="hero-video"
+        autoPlay muted loop playsInline
+        style={{ transform: `scale(1.12) translateY(${parallax}px)` }}
+        poster=""
+      >
+        <source src="Transition_mountains_to_school_a…_202606062059.mp4" type="video/mp4" />
+        {/* Fallback: gradient background if video not found */}
+      </video>
+      {/* Fallback bg in case video doesn't load */}
+      
+      <div className="hero-overlay" />
+      <div className="hero-content" style={{ opacity }}>
+        <div className="tag" style={{ marginBottom: '1.5rem' }}>Est. 2014 · Excellence · Integrity · Innovation</div>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1rem', letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.8rem', fontWeight: 300 }}>Welcome to</p>
+        <h1 className="display-heading" style={{ fontSize: 'clamp(2.8rem, 7vw, 5.5rem)', marginBottom: '1.5rem', textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}>
+          Global<br /><em>Public School</em>
+        </h1>
+        <div className="gold-line" style={{ marginBottom: '1.5rem' }}>
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.05rem', color: 'var(--text-muted)', fontStyle: 'italic', letterSpacing: '1px' }}>Shaping minds. Inspiring futures.</span>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '1rem' }}>
+          <a href={`https://wa.me/${WA_PHONE}?text=${encodeURIComponent("Hello! I'd like to know more about Global Public School.")}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <button className="nav-btn" style={{ padding: '0.75rem 2rem', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '0.6rem', border: '1px solid #25D366', color: '#25D366' }}>
+              <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.46.664 4.76 1.82 6.74L2 30l7.46-1.8A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm6.22 19.9c-.34-.17-2-.98-2.31-1.1-.31-.11-.54-.17-.77.17-.23.34-.88 1.1-1.08 1.32-.2.23-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.69-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.23.06-.43-.03-.6-.08-.17-.77-1.85-1.05-2.53-.28-.67-.56-.58-.77-.59h-.65c-.23 0-.6.08-.91.4-.31.31-1.2 1.17-1.2 2.85s1.23 3.3 1.4 3.53c.17.23 2.42 3.7 5.87 5.18.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2-.82 2.28-1.6.28-.78.28-1.45.2-1.6-.08-.14-.31-.22-.65-.39z"/></svg>
+              Chat on WhatsApp
+            </button>
+          </a>
+          <button className="nav-btn" style={{ padding: '0.75rem 2rem', fontSize: '0.72rem', background: 'var(--gold)', color: 'var(--deep)', borderColor: 'var(--gold)' }}>Apply for Admission</button>
+        </div>
+      </div>
+      <div className="scroll-cue">
+        <span>Scroll</span>
+        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </section>
+  );
+}
+
+function Marquee() {
+  const items = ["Academic Excellence","National Award Winners","75+ Years of Legacy","CBSE Affiliated","World-Class Infrastructure","5200+ Students","Global Partnerships"];
+  return (
+    <div className="marquee-wrap">
+      <div className="marquee">
+        {[...items,...items].map((item,i) => (
+          <div className="marquee-item" key={i}>{item}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <section id="about-us" className="section-full">
+      <div className="section">
+        <div className="grid-2" style={{ gap: '5rem' }}>
+          <div>
+            <div className="tag reveal">About Our Institution</div>
+            <h2 className="display-heading reveal" style={{ marginBottom: '1.5rem' }}>A Legacy of <em>Excellence</em><br />Since 2014</h2>
+            <p className="body-text reveal" style={{ marginBottom: '1.2rem' }}>Global Public School has stood as a beacon of transformative education for over seven decades. Founded with the belief that every child carries within them the spark of greatness, we have dedicated ourselves to nurturing that potential through a harmonious blend of academic rigour, creative exploration, and character building.</p>
+            <p className="body-text reveal" style={{ marginBottom: '2rem' }}>Our CBSE-affiliated curriculum is enhanced by global perspectives, technology integration, and a deep commitment to the holistic development of every student who walks through our doors.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              {stats.map((s,i) => (
+                <div key={i} className="reveal" style={{ borderLeft: '2px solid var(--gold)', paddingLeft: '1rem' }}>
+                  <div className="stat-num">{s.num}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '0.3rem' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="principal-frame reveal">
+              <div style={{ width: '100%', aspectRatio: '4/3', background: 'linear-gradient(135deg, #1A1A3A 0%, #0A0A1F 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '5rem', border: '1px solid var(--border)' }}>🏛️</div>
+            </div>
+            <div className="card reveal" style={{ marginTop: '0.5rem' }}>
+              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.05rem', fontStyle: 'italic', color: 'var(--text)', lineHeight: 1.7 }}>"We don't just teach subjects — we build thinkers, dreamers, and leaders who will shape tomorrow."</p>
+              <p style={{ fontSize: '0.72rem', color: 'var(--gold)', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '1rem' }}>— Dr.Pinaki Shankar
+, Principal</p>
+            </div>
+          </div>
+        </div>
+        <div className="grid-3" style={{ marginTop: '5rem', gap: '1.5rem' }}>
+          {pillars.map((p,i) => (
+            <div className="card reveal" key={i}>
+              <div className="card-icon">{p.icon}</div>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', marginBottom: '0.8rem', color: 'var(--text)' }}>{p.title}</h3>
+              <p className="body-text" style={{ fontSize: '0.82rem' }}>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Principal() {
+  return (
+    <section id="principal" style={{ padding: '7rem 0', background: 'var(--deep)', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.04) 0%, transparent 70%)' }} />
+      <div className="section" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="grid-2" style={{ gap: '5rem', alignItems: 'start' }}>
+          <div style={{ position: 'relative' }}>
+            <div style={{ border: '1px solid var(--border)', overflow: 'hidden', position: 'relative' }}>
+              <div style={{ width: '100%', aspectRatio: '3/4', background: 'linear-gradient(160deg, #1A1A3A, #0D0D1A)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ fontSize: '6rem' }}>👩‍🏫</div>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', color: 'var(--text)' }}>Dr. Pinaki Shankar</p>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '0.3rem' }}>Principal & Director</p>
+                </div>
+              </div>
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top, rgba(10,10,15,0.9), transparent)' }} />
+            </div>
+            <div style={{ position: 'absolute', bottom: '-16px', left: '-16px', width: '60%', height: '60%', border: '1px solid var(--gold-dark)', zIndex: -1 }} />
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '2.5rem' }}>
+              {["M.Ed, PhD","35+ Years","CBSE Fellow"].map((b,i) => (
+                <div key={i} style={{ flex: 1, background: 'var(--surface2)', border: '1px solid var(--border)', padding: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '1px' }}>{b}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="tag reveal">A Word From Our Leader</div>
+            <h2 className="display-heading reveal" style={{ marginBottom: '2rem' }}>From the <em>Principal's</em><br />Desk</h2>
+            <blockquote className="principal-quote reveal" style={{ marginBottom: '2rem' }}>
+              "At Global Public School, we strive to create an environment where learning extends beyond textbooks. Our aim is to develop confident, responsible, and capable individuals who are prepared to face future challenges with knowledge, integrity, and compassion. Every child deserves quality education and the opportunity to discover their true potential."
+            </blockquote>
+            <p className="body-text reveal" style={{ marginBottom: '1.2rem' }}>Over my three decades in education, I have come to believe that every child is born with extraordinary potential. Our role — as educators, as mentors, as a school — is to create the conditions in which that potential can flourish without limits.</p>
+            <p className="body-text reveal" style={{ marginBottom: '2rem' }}>Our dedicated faculty, world-class infrastructure, and a curriculum that balances tradition with innovation ensure that every GPS graduate steps into the world not just academically prepared, but emotionally intelligent, socially responsible, and globally aware.</p>
+            <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+              <div style={{ height: '1px', width: '60px', background: 'var(--gold)' }} />
+              <div>
+                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem' }}>Dr. Pinaki Shankar</p>
+                <p style={{ fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '0.2rem' }}>Principal</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Achievements() {
+  return (
+    <section id="achievements" className="section-full">
+      <div className="section">
+        <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto 4rem' }}>
+          <div className="tag reveal" style={{ justifyContent: 'center' }}>Honours & Recognition</div>
+          <h2 className="display-heading reveal">Our <em>Achievements</em></h2>
+          <p className="body-text reveal" style={{ marginTop: '1rem' }}>A glittering record of academic, athletic, and cultural excellence that reflects our commitment to nurturing champions.</p>
+        </div>
+        <div className="grid-2" style={{ gap: '1rem' }}>
+          {achievements.map((a,i) => (
+            <div className="achievement-card reveal" key={i}>
+              <div className="ach-num">{a.num}</div>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.05rem', color: 'var(--text)' }}>{a.title}</h3>
+                  <span style={{ fontSize: '0.65rem', color: 'var(--gold)', letterSpacing: '2px', whiteSpace: 'nowrap', marginLeft: '1rem' }}>{a.year}</span>
+                </div>
+                <p className="body-text" style={{ fontSize: '0.8rem' }}>{a.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Gallery() {
+  const photos = [
+    { src: "school photo.webp",  label: "Our Campus",           tall: true  },
+    { src: "class 1.webp",       label: "Classrooms",           tall: false },
+    { src: "activity 1.webp",    label: "Science Exhibition",   tall: false },
+    { src: "event 1.webp",       label: "School Events",        tall: false },
+    { src: "event 2.webp",       label: "Prize Distribution",   tall: false },
+    { src: "pic 1.webp",         label: "Student Projects",     tall: false },
+    { src: "media/1.jpeg",         label: "Newspaper",     tall: false },
+    { src: "media/2.jpeg",         label: "Newspaper",     tall: false },
+    { src: "media/3.jpeg",         label: "Newspaper",     tall: false },
+    { src: "media/ENVIRONMENT DAY.jpeg",         label: "Environment day",     tall: false },
+    { src: "media/GIRLS FRONT.jpeg",         label: "Students",     tall: false },
+    { src: "media/GROUND.jpeg",         label: "Ground",     tall: false },
+    { src: "media/INAUGRATION.jpeg",         label: "Inaugration",     tall: false },
+    { src: "media/MAIN POSTER.jpeg",         label: "Poster",     tall: false },
+    { src: "media/PATNA TRIP.jpeg",         label: "Trip to Patna",     tall: false },
+    { src: "media/PATNA TRIP 2.jpeg",         label: "Trip to Patna",     tall: false },
+    { src: "media/PRATIBHA SAMMAN.jpeg",         label: "Pratibha Samman",     tall: false },
+    { src: "media/SUMMER CAMP.jpeg",         label: "Summer Camp",     tall: false },
+    { src: "media/SWINGS.jpeg",         label: "Swings",     tall: false },
+    { src: "media/TOYS.jpeg",         label: "Toys",     tall: false },
+    { src: "media/TRAMPOLINE.jpeg",         label: "Trampoline",     tall: false },
+    { src: "media/WhatsApp Image 2026-06-07 at 09.34.08.jpeg",         label: "Newspaper",     tall: false },
+    { src: "media/WhatsApp Image 2026-06-07 at 09.35.01.jpeg",         label: "Newspaper",     tall: false },
+    { src: "media/WhatsApp Image 2026-06-07 at 09.35.54.jpeg",         label: "Newspaper",     tall: false },
+  ];
+  const [lightbox, setLightbox] = useState(null);
+
+  return (
+    <section id="gallery" style={{ padding: '7rem 0', background: 'var(--deep)' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ textAlign: 'center', maxWidth: '620px', margin: '0 auto 4rem' }}>
+          <div className="tag reveal" style={{ justifyContent: 'center' }}>Campus Life</div>
+          <h2 className="display-heading reveal">Life at <em>GPS</em></h2>
+          <p className="body-text reveal" style={{ marginTop: '1rem' }}>Explore our campus, vibrant student life, and the spaces where learning comes alive.</p>
+        </div>
+
+        {/* Gallery grid */}
+        <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 240px)', gap: '6px' }}>
+          {photos.map((p, i) => (
+            <div
+              key={i}
+              onClick={() => setLightbox(p)}
+              style={{
+                gridRow: i === 0 ? 'span 2' : 'span 1',
+                overflow: 'hidden', position: 'relative',
+                cursor: 'pointer', background: 'var(--surface2)'
+              }}
+            >
+              <img
+                src={p.src}
+                alt={p.label}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+                  transition: 'transform 0.5s, filter 0.4s', filter: 'brightness(0.75) saturate(0.85)' }}
+                onMouseEnter={e => { e.currentTarget.style.transform='scale(1.06)'; e.currentTarget.style.filter='brightness(0.95) saturate(1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.filter='brightness(0.75) saturate(0.85)'; }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 55%)',
+                display: 'flex', alignItems: 'flex-end', padding: '1rem', pointerEvents: 'none' }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', color: 'var(--text)' }}>{p.label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Lightbox */}
+        {lightbox && (
+          <div
+            onClick={() => setLightbox(null)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', zIndex: 999,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
+          >
+            <div style={{ position: 'relative', maxWidth: '900px', width: '100%' }} onClick={e => e.stopPropagation()}>
+              <img src={lightbox.src} alt={lightbox.label}
+                style={{ width: '100%', maxHeight: '80vh', objectFit: 'contain', display: 'block', border: '1px solid var(--border)' }} />
+              <p style={{ fontFamily: "'Playfair Display', serif", textAlign: 'center', color: 'var(--gold)',
+                marginTop: '1rem', fontSize: '1rem', letterSpacing: '1px' }}>{lightbox.label}</p>
+              <button onClick={() => setLightbox(null)}
+                style={{ position: 'absolute', top: '-1.5rem', right: '-1.5rem', background: 'var(--surface2)',
+                  border: '1px solid var(--border)', color: 'var(--text)', width: '36px', height: '36px',
+                  cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function Admissions() {
+  return (
+    <section id="admissions" className="section-full">
+      <div className="section">
+        <div className="grid-2" style={{ gap: '5rem', alignItems: 'start' }}>
+          <div>
+            <div className="tag reveal">Join Our Family</div>
+            <h2 className="display-heading reveal">Admissions <em>2025–26</em></h2>
+            <p className="body-text reveal" style={{ marginTop: '1rem', marginBottom: '2rem' }}>We warmly invite families who share our vision of holistic, excellence-driven education to apply. Our admissions process is designed to be transparent, fair, and welcoming.</p>
+            <div className="card reveal" style={{ background: 'linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02))', border: '1px solid var(--gold)' }}>
+              <p style={{ fontSize: '0.7rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1rem' }}>Key Dates</p>
+              {[
+                ["Application Opens", "July 1, 2024"],
+                ["Early Bird Deadline", "July 31, 2024"],
+                ["Entrance Assessment", "August 15–20, 2024"],
+                ["Results Announced", "September 1, 2024"],
+                ["Session Begins", "April 1, 2025"],
+              ].map(([label, date], i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', borderBottom: i < 4 ? '1px solid var(--border)' : 'none' }}>
+                  <span className="body-text" style={{ fontSize: '0.82rem' }}>{label}</span>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--gold)', fontWeight: 500 }}>{date}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {admissionSteps.map((s,i) => (
+              <div className="step reveal" key={i}>
+                <div className="step-num">{s.step}</div>
+                <div>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', marginBottom: '0.4rem', color: 'var(--text)' }}>{s.title}</h3>
+                  <p className="body-text" style={{ fontSize: '0.8rem' }}>{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function News({ onViewAll }) {
+  return (
+    <section id="news" style={{ padding: '7rem 0', background: 'var(--deep)' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div className="tag reveal">Latest Updates</div>
+            <h2 className="display-heading reveal">News & <em>Events</em></h2>
+          </div>
+          <a href="#" onClick={e => { e.preventDefault(); onViewAll(); }} style={{ color: 'var(--gold)', fontSize: '0.75rem', letterSpacing: '2px', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '1px solid var(--gold)', paddingBottom: '2px' }}>View All →</a>
+        </div>
+        <div className="grid-3">
+          {news.map((n,i) => (
+            <div className="news-card reveal" key={i}>
+              <div style={{ height: '180px', background: `linear-gradient(135deg, ${n.color}, #0A0A1F)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>
+                {['🔬','🏆','📋'][i]}
+              </div>
+              <div className="news-body">
+                <p className="news-tag">{n.tag}</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', lineHeight: 1.4, marginBottom: '0.8rem', color: 'var(--text)' }}>{n.title}</h3>
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{n.date}</p>
+                <a href="#" style={{ display: 'inline-block', marginTop: '1rem', fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', textDecoration: 'none', borderBottom: '1px solid var(--gold-dark)', paddingBottom: '2px' }}>Read More →</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer({ onContactClick, onPageClick }) {
+  return (
+    <footer className="footer">
+      <div className="footer-grid">
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.2rem' }}>
+            <div className="nav-crest">⚜</div>
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, color: 'var(--gold)' }}>Global Public School</span>
+          </div>
+          <p className="body-text" style={{ fontSize: '0.82rem', maxWidth: '300px', marginBottom: '1.5rem' }}>Shaping young minds with excellence, integrity, and innovation since 2014. A proud CBSE-affiliated institution committed to global citizenship.</p>
+          <div style={{ display: 'flex', gap: '0.6rem' }}>
+          {['f','in','tw','yt'].map((s,idx) => (
+              <a
+                key={s}
+                href={idx === 0 ? 'https://share.google/t6HpZTd6joZDjTAeY' : '#'}
+                target={idx === 0 ? '_blank' : '_self'}
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <div style={{ width: '34px', height: '34px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.7rem', color: 'var(--text-muted)', transition: 'all 0.2s' }} onMouseEnter={e => { e.target.style.borderColor='var(--gold)'; e.target.style.color='var(--gold)'; }} onMouseLeave={e => { e.target.style.borderColor='var(--border)'; e.target.style.color='var(--text-muted)'; }}>{s}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+        {[
+          { heading: "Quick Links", items: ["About Us","Admissions","Faculty","Curriculum","Events","Gallery"] },
+          { heading: "Academics", items: ["Primary School","Middle School","Senior Secondary","STEM Program","Sports Academy","Arts Program"] },
+          { heading: "Support", items: ["Contact Us","Fee Structure","School Calendar","Bus Routes","Parent Portal","Alumni Network"] },
+        ].map((col,i) => (
+          <div key={i}>
+            <p style={{ fontSize: '0.7rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1.2rem', fontWeight: 600 }}>{col.heading}</p>
+            <ul className="footer-links">
+              {col.items.map(item => (
+                <li key={item}>
+                  {item === 'Contact Us' ? (
+                    <a href="#" onClick={e => { e.preventDefault(); onContactClick(); }}>{item}</a>
+                  ) : item === 'Gallery' ? (
+                    <a href="#" onClick={e => { e.preventDefault(); onPageClick('gallery'); }}>{item}</a>
+                  ) : item === 'Events' ? (
+                    <a href="#" onClick={e => { e.preventDefault(); onPageClick('news'); }}>{item}</a>
+                  ) : (
+                    <a href="#">{item}</a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="footer-bottom">
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>© 2024 Global Public School. All rights reserved.</p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Privacy Policy · Terms of Use · Sitemap</p>
+      </div>
+    </footer>
+  );
+}
+
+const WA_PHONE = "919876543210"; // ← replace with real number
+
+function WhatsAppCTA() {
+  const msg = encodeURIComponent("Hello! I'd like to know more about Global Public School.");
+  const href = `https://wa.me/${WA_PHONE}?text=${msg}`;
+  const WaIcon = () => (
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2C8.268 2 2 8.268 2 16c0 2.46.664 4.76 1.82 6.74L2 30l7.46-1.8A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.4a11.34 11.34 0 01-5.78-1.58l-.41-.25-4.43 1.07 1.1-4.32-.27-.44A11.36 11.36 0 014.6 16C4.6 9.71 9.71 4.6 16 4.6S27.4 9.71 27.4 16 22.29 27.4 16 27.4zm6.22-8.5c-.34-.17-2-.98-2.31-1.1-.31-.11-.54-.17-.77.17-.23.34-.88 1.1-1.08 1.32-.2.23-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.69-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.23.06-.43-.03-.6-.08-.17-.77-1.85-1.05-2.53-.28-.67-.56-.58-.77-.59h-.65c-.23 0-.6.08-.91.4-.31.31-1.2 1.17-1.2 2.85s1.23 3.3 1.4 3.53c.17.23 2.42 3.7 5.87 5.18.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2-.82 2.28-1.6.28-.78.28-1.45.2-1.6-.08-.14-.31-.22-.65-.39z"/>
+    </svg>
+  );
+  return (
+    <div className="wa-cta-section">
+      <div className="wa-cta-inner">
+        <div className="wa-cta-ornament">
+          <span style={{ fontSize: '0.6rem', letterSpacing: '4px', textTransform: 'uppercase', color: 'rgba(37,211,102,0.7)' }}>Direct Line</span>
+        </div>
+        <h2 className="display-heading reveal" style={{ marginBottom: '1rem', fontSize: 'clamp(1.8rem,4vw,2.8rem)' }}>
+          Have a Question? <em style={{ color: '#25D366' }}>Let's Talk.</em>
+        </h2>
+        <p className="body-text reveal" style={{ maxWidth: '520px', margin: '0 auto 2.5rem', fontSize: '0.92rem' }}>
+          Our admissions team is available on WhatsApp — reach us instantly for enquiries about admissions, fees, campus visits, and more.
+        </p>
+        <a href={href} target="_blank" rel="noopener noreferrer" className="wa-cta-btn reveal">
+          <WaIcon />
+          Contact Us via WhatsApp
+        </a>
+        <p style={{ marginTop: '1.5rem', fontSize: '0.68rem', letterSpacing: '2px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+          Mon – Sat · 8 AM – 6 PM · Typically replies within minutes
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PageShell({ onBack, children }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--deep)', paddingTop: '72px' }}>
+      <nav className="nav scrolled">
+        <div className="nav-logo">
+          <div className="nav-crest">⚜</div>
+          <div className="nav-logo-name">
+            <span>Global Public School</span>
+            <span>Est. 2014 · Benipur, Bihar</span>
+          </div>
+        </div>
+        <button onClick={onBack} className="nav-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          ← Back to Home
+        </button>
+      </nav>
+      {children}
+    </div>
+  );
+}
+
+function GalleryPage({ onBack }) {
+  const photos = [
+    { src: "school photo.webp",  label: "Our Campus",           tall: true  },
+    { src: "class 1.webp",       label: "Classrooms",           tall: false },
+    { src: "activity 1.webp",    label: "Science Exhibition",   tall: false },
+    { src: "event 1.webp",       label: "School Events",        tall: false },
+    { src: "event 2.webp",       label: "Prize Distribution",   tall: false },
+    { src: "pic 1.webp",         label: "Student Projects",     tall: false },
+    { src: "media/1.jpeg",                                    label: "Newspaper",         tall: false },
+    { src: "media/2.jpeg",                                    label: "Newspaper",         tall: false },
+    { src: "media/3.jpeg",                                    label: "Newspaper",         tall: false },
+    { src: "media/ENVIRONMENT DAY.jpeg",                      label: "Environment Day",   tall: false },
+    { src: "media/GIRLS FRONT.jpeg",                          label: "Students",          tall: false },
+    { src: "media/GROUND.jpeg",                               label: "Ground",            tall: false },
+    { src: "media/INAUGRATION.jpeg",                          label: "Inauguration",      tall: false },
+    { src: "media/MAIN POSTER.jpeg",                          label: "Poster",            tall: false },
+    { src: "media/PATNA TRIP.jpeg",                           label: "Trip to Patna",     tall: false },
+    { src: "media/PATNA TRIP 2.jpeg",                         label: "Trip to Patna",     tall: false },
+    { src: "media/PRATIBHA SAMMAN.jpeg",                      label: "Pratibha Samman",   tall: false },
+    { src: "media/SUMMER CAMP.jpeg",                          label: "Summer Camp",       tall: false },
+    { src: "media/SWINGS.jpeg",                               label: "Swings",            tall: false },
+    { src: "media/TOYS.jpeg",                                 label: "Toys",              tall: false },
+    { src: "media/TRAMPOLINE.jpeg",                           label: "Trampoline",        tall: false },
+    { src: "media/WhatsApp Image 2026-06-07 at 09.34.08.jpeg", label: "Newspaper",       tall: false },
+    { src: "media/WhatsApp Image 2026-06-07 at 09.35.01.jpeg", label: "Newspaper",       tall: false },
+    { src: "media/WhatsApp Image 2026-06-07 at 09.35.54.jpeg", label: "Newspaper",       tall: false },
+  ];
+  const [lightbox, setLightbox] = useState(null);
+
+  return (
+    <PageShell onBack={onBack}>
+      {/* Hero banner */}
+      <div style={{ background: 'linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%)', borderBottom: '1px solid var(--border)', padding: '5rem 2rem 4rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 80%, rgba(201,168,76,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="tag" style={{ justifyContent: 'center', marginBottom: '1rem' }}>Campus Life</div>
+          <h1 className="display-heading" style={{ marginBottom: '1rem' }}>Life at <em>GPS</em></h1>
+          <p className="body-text" style={{ maxWidth: '520px', margin: '0 auto', fontSize: '0.95rem' }}>
+            Explore our campus, vibrant student life, and the spaces where learning comes alive.
+          </p>
+        </div>
+      </div>
+
+      {/* Full photo grid */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+          {photos.map((p, i) => (
+            <div key={i} onClick={() => setLightbox(p)}
+              style={{ overflow: 'hidden', position: 'relative', cursor: 'pointer', background: 'var(--surface2)', aspectRatio: '4/3' }}>
+              <img src={p.src} alt={p.label}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s, filter 0.4s', filter: 'brightness(0.75) saturate(0.85)' }}
+                onMouseEnter={e => { e.currentTarget.style.transform='scale(1.06)'; e.currentTarget.style.filter='brightness(0.95) saturate(1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.filter='brightness(0.75) saturate(0.85)'; }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,15,0.85) 0%, transparent 55%)', display: 'flex', alignItems: 'flex-end', padding: '1rem', pointerEvents: 'none' }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', color: 'var(--text)' }}>{p.label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div onClick={() => setLightbox(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div style={{ position: 'relative', maxWidth: '900px', width: '100%' }} onClick={e => e.stopPropagation()}>
+            <img src={lightbox.src} alt={lightbox.label} style={{ width: '100%', maxHeight: '80vh', objectFit: 'contain', display: 'block', border: '1px solid var(--border)' }} />
+            <p style={{ fontFamily: "'Playfair Display', serif", textAlign: 'center', color: 'var(--gold)', marginTop: '1rem', fontSize: '1rem', letterSpacing: '1px' }}>{lightbox.label}</p>
+            <button onClick={() => setLightbox(null)} style={{ position: 'absolute', top: '-1.5rem', right: '-1.5rem', background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text)', width: '36px', height: '36px', cursor: 'pointer', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+          </div>
+        </div>
+      )}
+    </PageShell>
+  );
+}
+
+function NewsPage({ onBack }) {
+  const allNews = [
+    { tag: "Academic",    title: "Annual Science Fair 2024 — Students Showcase Groundbreaking Projects", date: "June 2, 2024",  icon: "🔬", color: "#1A2744" },
+    { tag: "Events",      title: "Inter-School Debate Championship: GPS Wins Gold",                      date: "May 20, 2024", icon: "🏆", color: "#1A2D1A" },
+    { tag: "Admissions",  title: "Admissions Open for 2025-26: Early Bird Deadline July 31",             date: "May 10, 2024", icon: "📋", color: "#2D1A1A" },
+    { tag: "Sports",      title: "GPS Cricket Team Wins District Championship",                          date: "Apr 28, 2024", icon: "🏏", color: "#1A2030" },
+    { tag: "Cultural",    title: "Annual Day Celebration: A Night to Remember",                          date: "Apr 15, 2024", icon: "🎭", color: "#2A1A2D" },
+    { tag: "Academic",    title: "Three GPS Students Qualify for National Mathematics Olympiad",         date: "Mar 30, 2024", icon: "📐", color: "#1A2744" },
+  ];
+
+  return (
+    <PageShell onBack={onBack}>
+      {/* Hero banner */}
+      <div style={{ background: 'linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%)', borderBottom: '1px solid var(--border)', padding: '5rem 2rem 4rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 80%, rgba(201,168,76,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="tag" style={{ justifyContent: 'center', marginBottom: '1rem' }}>Latest Updates</div>
+          <h1 className="display-heading" style={{ marginBottom: '1rem' }}>News & <em>Events</em></h1>
+          <p className="body-text" style={{ maxWidth: '520px', margin: '0 auto', fontSize: '0.95rem' }}>
+            Stay updated with the latest happenings, achievements, and announcements from Global Public School.
+          </p>
+        </div>
+      </div>
+
+      {/* News grid */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem' }}>
+        <div className="grid-3">
+          {allNews.map((n, i) => (
+            <div className="news-card" key={i} style={{ cursor: 'pointer' }}>
+              <div style={{ height: '180px', background: `linear-gradient(135deg, ${n.color}, #0A0A1F)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>
+                {n.icon}
+              </div>
+              <div className="news-body">
+                <p className="news-tag">{n.tag}</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', lineHeight: 1.4, marginBottom: '0.8rem', color: 'var(--text)' }}>{n.title}</h3>
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{n.date}</p>
+                <a href="#" onClick={e => e.preventDefault()} style={{ display: 'inline-block', marginTop: '1rem', fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', textDecoration: 'none', borderBottom: '1px solid var(--gold-dark)', paddingBottom: '2px' }}>Read More →</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </PageShell>
+  );
+}
+
+function ContactPage({ onBack }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', enquiry: '', message: '' });
+  const [status, setStatus] = useState('idle');
+  const [error, setError] = useState('');
+
+  function handleChange(e) { setForm(prev => ({ ...prev, [e.target.name]: e.target.value })); }
+  function validate() {
+    if (!form.name.trim()) return 'Please enter your name.';
+    if (!form.message.trim()) return 'Please enter a message.';
+    return null;
+  }
+  function handleSubmit() {
+    const err = validate(); if (err) { setError(err); return; }
+    setError('');
+    const waPhone = WA_PHONE;
+    const parts = [
+      `*New Enquiry — Global Public School*`,
+      `Name: ${form.name}`,
+      form.email   ? `Email: ${form.email}`   : null,
+      form.phone   ? `Phone: ${form.phone}`   : null,
+      form.enquiry ? `Type: ${form.enquiry}`  : null,
+      `Message: ${form.message}`,
+    ].filter(Boolean).join('\n');
+    const url = `https://wa.me/${waPhone}?text=${encodeURIComponent(parts)}`;
+    window.open(url, '_blank');
+    setStatus('success');
+    setForm({ name: '', email: '', phone: '', enquiry: '', message: '' });
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--deep)', paddingTop: '72px' }}>
+      {/* Minimal nav bar on contact page */}
+      <nav className="nav scrolled">
+        <div className="nav-logo">
+          <div className="nav-crest">⚜</div>
+          <span>Global Public School</span>
+        </div>
+        <button onClick={onBack} className="nav-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          ← Back to Home
+        </button>
+      </nav>
+
+      {/* Hero banner */}
+      <div style={{ background: 'linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%)', borderBottom: '1px solid var(--border)', padding: '5rem 2rem 4rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 80%, rgba(201,168,76,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="tag" style={{ justifyContent: 'center', marginBottom: '1rem' }}>We're Here to Help</div>
+          <h1 className="display-heading" style={{ marginBottom: '1rem' }}>Contact <em>Us</em></h1>
+          <p className="body-text" style={{ maxWidth: '520px', margin: '0 auto', fontSize: '0.95rem' }}>
+            Have a question about admissions, fees, or campus life? Our team is happy to help.
+          </p>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '5rem 2rem' }}>
+        <div className="grid-2" style={{ gap: '4rem', alignItems: 'start' }}>
+
+          {/* Left — info */}
+          <div>
+            <h2 className="sub-heading" style={{ marginBottom: '2rem' }}>Get in <em>Touch</em></h2>
+            {[
+              { icon: "📍", label: "Address",      val: "12 Scholar's Avenue, Knowledge Park, New Delhi – 110001" },
+              { icon: "📞", label: "Phone",        val: "+91 11 2345 6789 / +91 98765 43210" },
+              { icon: "✉️", label: "Email",        val: "admissions@globalpublicschool.edu.in" },
+              { icon: "🕐", label: "Office Hours", val: "Mon – Sat: 8:00 AM – 4:00 PM" },
+            ].map((c, i) => (
+              <div key={i} style={{ display: 'flex', gap: '1.2rem', marginBottom: '1.8rem', alignItems: 'flex-start' }}>
+                <div style={{ width: '48px', height: '48px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '1.2rem', background: 'var(--surface2)' }}>{c.icon}</div>
+                <div>
+                  <p style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.35rem' }}>{c.label}</p>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text)', lineHeight: 1.6 }}>{c.val}</p>
+                </div>
+              </div>
+            ))}
+
+            {/* Quick links */}
+            <div style={{ marginTop: '2.5rem', padding: '1.5rem', background: 'var(--surface2)', border: '1px solid var(--border)' }}>
+              <p style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1rem' }}>Quick Enquiries</p>
+              {['Admissions 2025–26', 'Fee Structure', 'Campus Visit Booking', 'Bus Routes & Transport'].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0', borderBottom: i < 3 ? '1px solid var(--border)' : 'none', cursor: 'pointer' }}
+                  onClick={() => setForm(f => ({ ...f, enquiry: item.split(' ')[0], message: `I'd like to know more about: ${item}` }))}>
+                  <span style={{ color: 'var(--gold)', fontSize: '0.8rem' }}>→</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.target.style.color='var(--text)'}
+                    onMouseLeave={e => e.target.style.color='var(--text-muted)'}>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Google Maps embed */}
+            <div style={{ marginTop: '2rem' }}>
+              <p style={{ fontSize: '0.65rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.8rem' }}>Find Us</p>
+              <a
+                href="https://www.google.com/maps?q=26.067248494547083,86.14180581896736"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'block', position: 'relative', border: '1px solid var(--border)', overflow: 'hidden', textDecoration: 'none' }}
+                title="Open in Google Maps"
+              >
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1791.9848214903925!2d86.14180581896736!3d26.067248494547083!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eddc65dbf93ba9%3A0xea3c72530e72dae0!2sGlobal%20Public%20School!5e0!3m2!1sen!2sin!4v1781021081345!5m2!1sen!2sin"
+                  width="100%"
+                  height="240"
+                  style={{ border: 0, display: 'block', filter: 'invert(90%) hue-rotate(180deg) saturate(0.7) brightness(0.85)', pointerEvents: 'none' }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Global Public School Location"
+                />
+                {/* Clickable overlay with label */}
+                <div style={{
+                  position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+                  padding: '0.8rem', background: 'linear-gradient(to top, rgba(10,10,15,0.75) 0%, transparent 50%)',
+                  transition: 'background 0.2s'
+                }}
+                  onMouseEnter={e => e.currentTarget.style.background='linear-gradient(to top, rgba(201,168,76,0.25) 0%, rgba(10,10,15,0.3) 100%)'}
+                  onMouseLeave={e => e.currentTarget.style.background='linear-gradient(to top, rgba(10,10,15,0.75) 0%, transparent 50%)'}
+                >
+                  <span style={{ fontSize: '0.7rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Open in Google Maps
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          {/* Right — form */}
+          <div style={{ background: 'var(--surface2)', border: '1px solid var(--border)', padding: '2.5rem' }}>
+            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', marginBottom: '0.5rem', color: 'var(--text)' }}>Send Us a Message</h3>
+            <p className="body-text" style={{ fontSize: '0.8rem', marginBottom: '2rem' }}>Fill the form and we'll open WhatsApp with your message pre-filled — just hit send!</p>
+
+            {status === 'success' ? (
+              <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+                <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>✅</div>
+                <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.3rem', color: 'var(--gold)', marginBottom: '0.75rem' }}>Opening WhatsApp!</h4>
+                <p className="body-text" style={{ marginBottom: '1.5rem' }}>Your message has been prepared. Complete sending it on WhatsApp to connect with our team instantly.</p>
+                <button className="submit-btn" onClick={() => setStatus('idle')}>Send Another</button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <input className="contact-input" placeholder="Your Name *" name="name" value={form.name} onChange={handleChange} />
+                  <input className="contact-input" placeholder="Email (optional)" name="email" type="email" value={form.email} onChange={handleChange} />
+                </div>
+                <input className="contact-input" placeholder="Phone Number" name="phone" value={form.phone} onChange={handleChange} />
+                <select className="contact-input" name="enquiry" value={form.enquiry} onChange={handleChange} style={{ cursor: 'pointer', appearance: 'none' }}>
+                  <option value="">Enquiry Type</option>
+                  <option>Admissions</option>
+                  <option>General Information</option>
+                  <option>Fee Structure</option>
+                  <option>Campus Visit</option>
+                  <option>Other</option>
+                </select>
+                <textarea className="contact-input" rows="6" placeholder="Your Message *" name="message" value={form.message} onChange={handleChange} style={{ resize: 'vertical' }} />
+                {error && <p style={{ fontSize: '0.78rem', color: '#E07070' }}>⚠ {error}</p>}
+                {status === 'error' && !error && <p style={{ fontSize: '0.78rem', color: '#E07070' }}>⚠ Something went wrong. Please try again.</p>}
+                <button className="submit-btn" onClick={handleSubmit}
+                  style={{ alignSelf: 'flex-start', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.46.664 4.76 1.82 6.74L2 30l7.46-1.8A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm6.22 19.9c-.34-.17-2-.98-2.31-1.1-.31-.11-.54-.17-.77.17-.23.34-.88 1.1-1.08 1.32-.2.23-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.69-1.01-.9-1.7-2.01-1.9-2.35-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.23.06-.43-.03-.6-.08-.17-.77-1.85-1.05-2.53-.28-.67-.56-.58-.77-.59h-.65c-.23 0-.6.08-.91.4-.31.31-1.2 1.17-1.2 2.85s1.23 3.3 1.4 3.53c.17.23 2.42 3.7 5.87 5.18.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2-.82 2.28-1.6.28-.78.28-1.45.2-1.6-.08-.14-.31-.22-.65-.39z"/></svg>
+                  Send via WhatsApp
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+}
+
+function App() {
+  const [page, setPage] = useState('home');
+  const scrollY = useScroll();
+  useReveal();
+
+  const goHome = () => { setPage('home'); setTimeout(() => window.scrollTo(0,0), 0); };
+  const goPage = (p) => { setPage(p); window.scrollTo(0,0); };
+
+  if (page === 'contact') return <ContactPage onBack={goHome} />;
+  if (page === 'gallery') return <GalleryPage onBack={goHome} />;
+  if (page === 'news')    return <NewsPage    onBack={goHome} />;
+
+  return (
+    <div>
+      <ScrollProgress scrollY={scrollY} />
+      <Nav scrollY={scrollY} onContactClick={() => goPage('contact')} onPageClick={goPage} />
+      <Hero scrollY={scrollY} onContactClick={() => goPage('contact')} />
+      <Marquee />
+      <About />
+      <div className="gold-divider" />
+      <Principal />
+      <div className="gold-divider" />
+      <Achievements />
+      <div className="gold-divider" />
+      <Gallery />
+      <div className="gold-divider" />
+      <Admissions />
+      <div className="gold-divider" />
+      <News onViewAll={() => goPage('news')} />
+      <div className="gold-divider" />
+      <WhatsAppCTA />
+      <div className="gold-divider" />
+      <Footer onContactClick={() => goPage('contact')} onPageClick={goPage} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
