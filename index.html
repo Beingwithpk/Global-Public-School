@@ -368,7 +368,7 @@ function Hero({ scrollY }) {
 }
 
 function Marquee() {
-  const items = ["Academic Excellence","National Award Winners","75+ Years of Legacy","CBSE Affiliated","World-Class Infrastructure","5200+ Students","Global Partnerships"];
+  const items = ["Academic Excellence","National Award Winners","A Decade of Excellence","CBSE Affiliated","World-Class Infrastructure","5200+ Students","Global Partnerships"];
   return (
     <div className="marquee-wrap">
       <div className="marquee">
@@ -388,7 +388,7 @@ function About() {
           <div>
             <div className="tag reveal">About Our Institution</div>
             <h2 className="display-heading reveal" style={{ marginBottom: '1.5rem' }}>A Legacy of <em>Excellence</em><br />Since 2014</h2>
-            <p className="body-text reveal" style={{ marginBottom: '1.2rem' }}>Global Public School has stood as a beacon of transformative education for over seven decades. Founded with the belief that every child carries within them the spark of greatness, we have dedicated ourselves to nurturing that potential through a harmonious blend of academic rigour, creative exploration, and character building.</p>
+            <p className="body-text reveal" style={{ marginBottom: '1.2rem' }}>Global Public School has stood as a beacon of transformative education since 2014. Founded with the belief that every child carries within them the spark of greatness, we have dedicated ourselves to nurturing that potential through a harmonious blend of academic rigour, creative exploration, and character building.</p>
             <p className="body-text reveal" style={{ marginBottom: '2rem' }}>Our CBSE-affiliated curriculum is enhanced by global perspectives, technology integration, and a deep commitment to the holistic development of every student who walks through our doors.</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               {stats.map((s,i) => (
@@ -674,17 +674,9 @@ function Footer({ onContactClick, onPageClick }) {
           </div>
           <p className="body-text" style={{ fontSize: '0.82rem', maxWidth: '300px', marginBottom: '1.5rem' }}>Shaping young minds with excellence, integrity, and innovation since 2014. A proud CBSE-affiliated institution committed to global citizenship.</p>
           <div style={{ display: 'flex', gap: '0.6rem' }}>
-          {['f','in','tw','yt'].map((s,idx) => (
-              <a
-                key={s}
-                href={idx === 0 ? 'https://share.google/t6HpZTd6joZDjTAeY' : '#'}
-                target={idx === 0 ? '_blank' : '_self'}
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none' }}
-              >
-                <div style={{ width: '34px', height: '34px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.7rem', color: 'var(--text-muted)', transition: 'all 0.2s' }} onMouseEnter={e => { e.target.style.borderColor='var(--gold)'; e.target.style.color='var(--gold)'; }} onMouseLeave={e => { e.target.style.borderColor='var(--border)'; e.target.style.color='var(--text-muted)'; }}>{s}</div>
-              </a>
-            ))}
+          <a href="https://share.google/t6HpZTd6joZDjTAeY" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+              <div style={{ width: '34px', height: '34px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.7rem', color: 'var(--text-muted)', transition: 'all 0.2s' }} onMouseEnter={e => { e.currentTarget.style.borderColor='var(--gold)'; e.currentTarget.style.color='var(--gold)'; }} onMouseLeave={e => { e.currentTarget.style.borderColor='var(--border)'; e.currentTarget.style.color='var(--text-muted)'; }}>f</div>
+            </a>
           </div>
         </div>
         {[
